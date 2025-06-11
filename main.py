@@ -25,7 +25,7 @@ def main():
     # Override the default timestep.
     model.opt.timestep = dt
 
-    end_effector = model.body("Fixed_Jaw").id
+    end_effector = model.site("attachment_site").id
 
     body_names = [
         "Rotation_Pitch",
@@ -86,14 +86,14 @@ def main():
             step_start = time.time()
             # data.mocap_pos[mocap_id, 0:2] = circle(data.time, 0.5, 0.5, 0.1, 0.1)
 
-            error_pos[:] = data.mocap_pos[mocap_id] - data.body(end_effector).xpos
+            error_pos[:] = data.mocap_pos[mocap_id] - data.site(end_effector).xpos
 
-            mujoco.mju_mat2Quat(ee_quat, data.body(end_effector).xmat)
+            mujoco.mju_mat2Quat(ee_quat, data.site(end_effector).xmat)
             mujoco.mju_negQuat(ee_quat_conj, ee_quat)
             mujoco.mju_mulQuat(error_quat, data.mocap_quat[mocap_id], ee_quat_conj)
             mujoco.mju_quat2Vel(error_ori, error_quat, 1.0)
 
-            mujoco.mj_jacBody(model, data, jac[:3], jac[3:], end_effector)
+            mujoco.mj_jacSite(model, data, jac[:3], jac[3:], end_effector)
 
             # Solve system of equations: J @ dq = error.
             dq = jac.T @ np.linalg.solve(jac @ jac.T + diag, error)
