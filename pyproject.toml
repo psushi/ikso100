@@ -1,0 +1,18 @@
+[project]
+name = "ik-so100"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "mujoco>=3.3.3",
+]
+
+# Dealing with mujoco's Python API
+[tool.pyright]
+reportAttributeAccessIssue= false
+reportUnknownMemberType = false
+reportUnknownArgumentType = false
+reportUnknownParameterType = false
+reportUnknownVariableType = false
+reportMissingTypeStubs = false
