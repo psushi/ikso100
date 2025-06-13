@@ -6,6 +6,8 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "mujoco>=3.3.3",
+    "opencv-contrib-python>=4.11.0.86",
+    "opencv-python>=4.11.0.86",
 ]
 
 # Dealing with mujoco's Python API
@@ -16,3 +18,4 @@ reportUnknownArgumentType = false
 reportUnknownParameterType = false
 reportUnknownVariableType = false
 reportMissingTypeStubs = false
+reportAny = false
