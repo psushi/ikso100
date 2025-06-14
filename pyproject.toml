@@ -8,6 +8,7 @@ dependencies = [
     "mujoco>=3.3.3",
     "opencv-contrib-python>=4.11.0.86",
     "opencv-python>=4.11.0.86",
+    "scipy>=1.15.3",
 ]
 
 # Dealing with mujoco's Python API
