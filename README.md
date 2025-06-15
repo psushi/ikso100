@@ -15,6 +15,15 @@ This project presents an innovative and cost-effective approach to robotic teleo
 Check out our **1-minute demonstration video** to see the system in action:
 [`firstdraft.mp4`](./firstdraft.mp4)
 
+## 💰 Cost Comparison
+
+| Traditional Setup | Our AprilTag System |
+|------------------|-------------------|
+| Leader Arm: $100+ & controller | 3D Printed Controller: $5 |
+| Follower Arm: $100+ & controller | Same SO-100 Robot |
+| **Total: $250+ | **Total: $15,005** |
+
+**Savings: $200~$10,000 per setup** 💸
 ## 🔧 System Architecture
 
 ### Hardware Components
@@ -102,8 +111,8 @@ python calibrate.py
 ### Controls
 - **Hand Movement**: Move the 3D printed controller to control the robot's end-effector joint and custom key-binding for gripper manipulation
 - **Arrow Keys**: 
-  - ↑ (UP): Open gripper
-  - ↓ (DOWN): Close gripper
+  - u (UP): Open gripper
+  - j (DOWN): Close gripper
 - **ESC/Q**: Exit the application
 
 ## 🧠 How It Works
@@ -146,16 +155,6 @@ This architecture ensures **smooth real-time teleoperation** by decoupling visio
 ```
 Hand Movements → AprilTag Tracking → Virtual Leader Arm → Simulated SO-100 → Data Collection → Real Robot Training
 ```
-
-## 💰 Cost Comparison
-
-| Traditional Setup | Our AprilTag System |
-|------------------|-------------------|
-| Leader Arm: $100-$10,000+ | 3D Printed Controller: $5 |
-| Follower Arm: $100-$15,000+ | Same SO-100 Robot |
-| **Total: $200-$25,000+** | **Total: $15,005** |
-
-**Savings: $200~$10,000 per setup** 💸
 
 ## 📁 Project Structure
 
