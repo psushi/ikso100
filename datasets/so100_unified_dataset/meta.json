@@ -1,0 +1,116 @@
+{
+  "codebase_version": "2.1.0",
+  "robot_type": "so100_arm",
+  "total_episodes": 3,
+  "total_frames": 3000,
+  "total_tasks": 1,
+  "task_names": [
+    "trajectories_demonstration"
+  ],
+  "data_path": "data",
+  "video_path": "videos",
+  "fps": 500,
+  "splits": {
+    "train": "0:0"
+  },
+  "features": {
+    "observation.state": {
+      "dtype": "float32",
+      "shape": [
+        24
+      ],
+      "names": [
+        "joint_pos",
+        "joint_vel",
+        "ee_pos",
+        "ee_rot",
+        "target_pos",
+        "target_rot"
+      ]
+    },
+    "action": {
+      "dtype": "float32",
+      "shape": [
+        6
+      ],
+      "names": [
+        "joint_commands"
+      ]
+    },
+    "episode_index": {
+      "dtype": "int64",
+      "shape": [],
+      "names": null
+    },
+    "frame_index": {
+      "dtype": "int64",
+      "shape": [],
+      "names": null
+    },
+    "timestamp": {
+      "dtype": "float64",
+      "shape": [],
+      "names": null
+    },
+    "observation.images.cam_high": {
+      "dtype": "video",
+      "shape": [
+        480,
+        640,
+        3
+      ],
+      "names": [
+        "height",
+        "width",
+        "channels"
+      ],
+      "info": {
+        "video.fps": 500,
+        "video.codec": "mp4v",
+        "video.pix_fmt": "yuv420p",
+        "video.is_depth_map": false,
+        "has_audio": false
+      }
+    },
+    "observation.images.cam_side": {
+      "dtype": "video",
+      "shape": [
+        480,
+        640,
+        3
+      ],
+      "names": [
+        "height",
+        "width",
+        "channels"
+      ],
+      "info": {
+        "video.fps": 500,
+        "video.codec": "mp4v",
+        "video.pix_fmt": "yuv420p",
+        "video.is_depth_map": false,
+        "has_audio": false
+      }
+    },
+    "observation.images.cam_front": {
+      "dtype": "video",
+      "shape": [
+        480,
+        640,
+        3
+      ],
+      "names": [
+        "height",
+        "width",
+        "channels"
+      ],
+      "info": {
+        "video.fps": 500,
+        "video.codec": "mp4v",
+        "video.pix_fmt": "yuv420p",
+        "video.is_depth_map": false,
+        "has_audio": false
+      }
+    }
+  }
+}

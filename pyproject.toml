@@ -5,6 +5,8 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
+    "h5py>=3.14.0",
+    "matplotlib>=3.10.3",
     "mujoco>=3.3.3",
     "opencv-contrib-python>=4.11.0.86",
     "opencv-python>=4.11.0.86",
@@ -20,3 +22,7 @@ reportUnknownParameterType = false
 reportUnknownVariableType = false
 reportMissingTypeStubs = false
 reportAny = false
+
+# ADD THIS SECTION TO THE END OF THE FILE
+[tool.setuptools]
+py-modules = ["main"]

@@ -1,0 +1,130 @@
+{
+  "codebase_version": "v2.1",
+  "robot_type": "so100_arm",
+  "total_episodes": 0,
+  "total_frames": 0,
+  "total_tasks": 1,
+  "total_videos": 4,
+  "total_chunks": 1,
+  "chunks_size": 1000,
+  "fps": 500,
+  "splits": {
+    "train": "0:80%"
+  },
+  "collection_mode": "viewer_teleoperation_with_video",
+  "data_path": "data",
+  "video_path": "videos",
+  "features": {
+    "observation.images.cam_high": {
+      "dtype": "video",
+      "shape": [
+        480,
+        640,
+        3
+      ],
+      "names": [
+        "height",
+        "width",
+        "channels"
+      ],
+      "info": {
+        "video.fps": 500,
+        "video.codec": "mp4v",
+        "video.pix_fmt": "yuv420p",
+        "video.is_depth_map": false,
+        "has_audio": false
+      }
+    },
+    "observation.images.cam_side": {
+      "dtype": "video",
+      "shape": [
+        480,
+        640,
+        3
+      ],
+      "names": [
+        "height",
+        "width",
+        "channels"
+      ],
+      "info": {
+        "video.fps": 500,
+        "video.codec": "mp4v",
+        "video.pix_fmt": "yuv420p",
+        "video.is_depth_map": false,
+        "has_audio": false
+      }
+    },
+    "observation.images.cam_front": {
+      "dtype": "video",
+      "shape": [
+        480,
+        640,
+        3
+      ],
+      "names": [
+        "height",
+        "width",
+        "channels"
+      ],
+      "info": {
+        "video.fps": 500,
+        "video.codec": "mp4v",
+        "video.pix_fmt": "yuv420p",
+        "video.is_depth_map": false,
+        "has_audio": false
+      }
+    },
+    "observation.images.viewer_screen": {
+      "dtype": "video",
+      "shape": [
+        600,
+        800,
+        3
+      ],
+      "names": [
+        "height",
+        "width",
+        "channels"
+      ],
+      "info": {
+        "video.fps": 500,
+        "video.codec": "mp4v",
+        "video.pix_fmt": "yuv420p",
+        "video.is_depth_map": false,
+        "has_audio": false,
+        "description": "Manual teleoperation viewer screen capture"
+      }
+    },
+    "observation.state": {
+      "dtype": "float32",
+      "shape": [
+        18
+      ],
+      "names": [
+        "joint_positions",
+        "joint_velocities",
+        "ee_position",
+        "ee_orientation"
+      ]
+    },
+    "action": {
+      "dtype": "float32",
+      "shape": [
+        6
+      ],
+      "names": [
+        "joint_commands"
+      ]
+    }
+  },
+  "created_at": "2025-06-15T12:06:06.825898",
+  "workspace_bounds": {
+    "x_min": -0.3,
+    "x_max": 0.3,
+    "y_min": -0.3,
+    "y_max": 0.3,
+    "z_min": 0.05,
+    "z_max": 0.6
+  }
+}

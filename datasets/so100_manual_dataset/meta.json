@@ -1,0 +1,50 @@
+{
+  "codebase_version": "1.0.0",
+  "robot_type": "so100_arm",
+  "collection_mode": "manual_teleoperation",
+  "aruco_enabled": true,
+  "total_episodes": 1,
+  "total_frames": 5,
+  "total_tasks": 1,
+  "total_videos": 0,
+  "total_chunks": 1,
+  "chunks_size": 1000,
+  "fps": 500,
+  "splits": {
+    "train": "0:80%"
+  },
+  "data_path": "data",
+  "video_path": "videos",
+  "features": {
+    "observation.state": {
+      "dtype": "float32",
+      "shape": [
+        18
+      ],
+      "names": [
+        "joint_positions",
+        "joint_velocities",
+        "ee_position",
+        "ee_orientation"
+      ]
+    },
+    "action": {
+      "dtype": "float32",
+      "shape": [
+        6
+      ],
+      "names": [
+        "joint_commands"
+      ]
+    }
+  },
+  "created_at": "2025-06-15T08:28:20.077922",
+  "workspace_bounds": {
+    "x_min": -0.3,
+    "x_max": 0.3,
+    "y_min": -0.3,
+    "y_max": 0.3,
+    "z_min": 0.05,
+    "z_max": 0.6
+  }
+}
