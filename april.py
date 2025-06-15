@@ -16,6 +16,12 @@ TAG_FAMILY = cv2.aruco.DICT_APRILTAG_16h5
 MARKER_SIZE = 0.046  # 30 mm
 CAM_ID = 0
 
+# Camera pose relative to world frame (camera positioned behind robot)
+# Camera behind robot looking forward, slightly angled down
+CAMERA_ROTATION = R.from_euler(
+    "xyz", [-45, 0, 0], degrees=True
+).as_matrix()  # 30° down angle
+
 # ---------- cube geometry --------------------------------------------------
 cube_length = 0.05
 cube_half = cube_length / 2
@@ -157,13 +163,20 @@ def vision_loop(q: Queue | None, calib="calib.npz"):
             if pose is not None:
                 if prev_pos is not None:
                     # ----------------  Δ translation  -------------------------
-                    d_pos = pose.pos - prev_pos  # (3,)
+                    d_pos = pose.pos - prev_pos  # (3,) in camera frame
+                    # Transform from camera frame to world frame using camera rotation
+                    d_pos_world = CAMERA_ROTATION @ d_pos
+                    # MuJoCo mocap axes: Red(X)=left, Green(Y)=forward, Blue(Z)=down
+                    # Camera right → MuJoCo left (X+), Camera forward → MuJoCo forward (Y+), Camera up → MuJoCo up (Z-)
+                    d_pos_mujoco = np.array(
+                        [d_pos_world[0], d_pos_world[2], -d_pos_world[1]]
+                    )
                     # ----------------  send newest only  ----------------------
                     try:
                         q.get_nowait()  # drop stale message
                     except Empty:
                         pass
-                    q.put(Pose(d_pos, quat=pose.quat))
+                    q.put(Pose(d_pos_mujoco, quat=pose.quat))
 
         if pose is not None:
             prev_pos = pose.pos  # update history

@@ -82,6 +82,14 @@ def sim_loop(queue: Queue | None = None):
 
         # Initialize the camera view to that of the free camera.
         mujoco.mjv_defaultFreeCamera(model, viewer.cam)
+        
+        # Position camera behind the robot
+        viewer.cam.distance = 0.6  # Even closer to target
+        viewer.cam.azimuth = 270   # Behind the robot (270 degrees)
+        viewer.cam.elevation = -25 # Higher elevation, looking down more
+        
+        # Enable body axes visualization
+        viewer.opt.frame = mujoco.mjtFrame.mjFRAME_BODY
 
         while viewer.is_running():
             step_start = time.time()
@@ -91,7 +99,8 @@ def sim_loop(queue: Queue | None = None):
                 try:
                     latest_pose = queue.get_nowait()
                     data.mocap_pos[mocap_id] += latest_pose.pos
-                    data.mocap_quat[mocap_id] = latest_pose.quat
+                    # Skip quaternion updates for now
+                    # data.mocap_quat[mocap_id] = latest_pose.quat
                 except Empty:
                     pass
 
