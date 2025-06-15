@@ -20,9 +20,9 @@ NAME_TO_ID = {
 }
 
 # Temporary, will be replaced a real cube later.
-cube_height = 0.03025
-cube_width = 0.0340
-cube_depth = 0.03025
+cube_height = 0.05
+cube_width = 0.0537
+cube_depth = 0.05
 half_cube_height = cube_height / 2
 half_cube_width = cube_width / 2
 half_cube_depth = cube_depth / 2
@@ -49,7 +49,7 @@ rot_offset = {
     @ R.from_euler("z", -90, degrees=True).as_matrix(),
 }
 
-MARKER_SIZE = 0.02
+MARKER_SIZE = 0.04
 
 
 def get_com_pose(
@@ -58,6 +58,9 @@ def get_com_pose(
     camera_matrix: npt.NDArray[np.float64],
     distortion_coeff: npt.NDArray[np.float64],
 ):
+    if len(corners) == 0:
+        return [], []
+
     com_rot = []
     com_pos = []
 
@@ -80,9 +83,13 @@ def get_com_pose(
         rot_offset_mat = rot_mat @ rot_offset[id[0]]
 
         com_rot.append(cv2.Rodrigues(rot_offset_mat)[0])
-        com_pos.append(pos_com)
 
-    return com_pos, com_rot[0]
+        print(f"Pos: {pos_com.flatten()}, id: {id}")
+        com_pos.append(pos_com.flatten())
+
+        print("Rot shape", np.array(com_rot).shape)
+
+    return np.array(com_pos), np.array(com_rot)[0]
 
 
 def detect_pose(
@@ -103,6 +110,7 @@ def detect_pose(
     gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
 
     det_params = cv2.aruco.DetectorParameters()
+    # NOTE: modified params
     DICT = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_50)
 
     detector = cv2.aruco.ArucoDetector(DICT, det_params)
@@ -122,12 +130,17 @@ def detect_pose(
 
     com_pos, com_rot = get_com_pose(corners, ids, camera_matrix, distortion_coeff)
 
+    if len(com_pos) == 0:
+        return frame_vis
+
+    com_mean = mean(com_pos, axis=0)
+
     frame_vis = cv2.drawFrameAxes(
         frame,
         camera_matrix,
         distortion_coeff,
         com_rot,
-        com_pos,
+        com_mean.flatten(),
         MARKER_SIZE * 0.5,
     )
 
