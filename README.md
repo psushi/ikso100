@@ -11,7 +11,7 @@ Cost-effective robotic teleoperation using **AprilTags** with a **3D printed con
 - Webcam
 
 ## 🎬 Demo
-[`firstdraft.mp4`](./firstdraft.mp4)
+[`1 Min Demo Video`](./347-IlliniRoboticsCrashDummies.mp4)
 
 ## 💰 Cost Comparison
 
