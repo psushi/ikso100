@@ -7,7 +7,7 @@ Cost-effective robotic teleoperation using **AprilTags** with a **3D printed con
 
 ### Required hardware:
 - SO-100 robot follower arm
-- 3D printed handheld controller 
+- 3D printed handheld controller (just a hollow cube with a grip)
 - Webcam
 
 ## 🎬 Demo
