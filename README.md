@@ -10,7 +10,7 @@ Cost-effective robotic teleoperation using **AprilTags** with a **3D printed con
 - 3D printed handheld controller (just a hollow cube with a grip)
 - Webcam
 
-## 🎬 Demo
+## 🎬 Demo (brain rot version)
 [`1 Min Demo Video`](https://github.com/user-attachments/assets/e8480acb-b422-40d0-b512-5118c11b4a0e)
 
 
