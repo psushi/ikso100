@@ -24,11 +24,11 @@ Cost-effective robotic teleoperation using **AprilTags** with a **3D printed con
 
 ## 🔧 System Architecture
 **Hardware**: 3D printed controller with AprilTags, webcam, SO-100 robot  
-**Software**: AprilTag detection, MuJoCo simulation, inverse kinematics, multi-threading
+**Software**: AprilTag detection, MuJoCo simulation
 
 ## 🛠 Setup
 
-**Prerequisites**: Python 3.10+, USB webcam, 3D printer
+**Prerequisites**: Python 3.10+, USB webcam
 
 1. **Install dependencies**:
    ```bash
@@ -42,7 +42,7 @@ Cost-effective robotic teleoperation using **AprilTags** with a **3D printed con
    python calibrate.py
    ```
 
-4. **Setup MuJoCo** (if needed):
+4. **Setup mjpython(macOS)**( :
    ```bash
    bash mjpy-init.sh
    ```
@@ -51,18 +51,18 @@ Cost-effective robotic teleoperation using **AprilTags** with a **3D printed con
 
 **Main application**:
 ```bash
-python main.py
+mjpython main.py
 ```
 
 **Individual components**:
 ```bash
-python april.py          # AprilTag detection only
-python mujoco_loop.py     # MuJoCo simulation only
+uv run april.py          # AprilTag detection only
+uv run mujoco_loop.py     # MuJoCo simulation only
 ```
 
 **Controls**:
 - **Hand movement**: Move controller to control robot end-effector
-- **w/s keys**: Open/close gripper
+- **u/j keys**: Open/close gripper (while focusing cursor in terminal)
 - **ESC/Q**: Exit
 
 ## 🧠 How It Works
@@ -86,8 +86,6 @@ python mujoco_loop.py     # MuJoCo simulation only
 ## 🔬 Technical Details
 
 **AprilTags**: DICT_APRILTAG_16h5 family, 46mm size, IDs 0-5  
-**Camera**: Behind robot, 45° downward, auto-calibrated  
-**Robot**: 6 DOF (Rotation, Pitch, Elbow, Wrist Pitch, Wrist Roll, Jaw)
 
 ## 🎓 Applications
 
