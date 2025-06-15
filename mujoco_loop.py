@@ -1,3 +1,4 @@
+import threading
 import time
 from queue import Empty, Queue
 
@@ -19,7 +20,68 @@ dt: float = 0.002
 max_angvel = 0.0
 
 
+# Gripper control variables
+gripper_target = 0.0
+
+
+def keyboard_listener():
+    """Simple keyboard listener for gripper control using terminal input"""
+    global gripper_target
+    try:
+        import sys
+        import termios
+        import tty
+
+        def getch():
+            fd = sys.stdin.fileno()
+            old_settings = termios.tcgetattr(fd)
+            try:
+                tty.setraw(fd)
+                ch = sys.stdin.read(1)
+                return ch
+            finally:
+                termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+
+        print("Keyboard controls active:")
+        print("- Press 'u' to open gripper")
+        print("- Press 'j' to close gripper")
+        print("- Press 'q' to quit")
+
+        while True:
+            key = getch()
+            if key == "u":
+                gripper_target = min(gripper_target + 0.1, 2.0)
+                print(f"Open gripper: {gripper_target:.2f}")
+            elif key == "j":
+                gripper_target = max(gripper_target - 0.1, -0.2)
+                print(f"Close gripper: {gripper_target:.2f}")
+            elif key == "q":
+                break
+
+    except ImportError:
+        # Fallback for non-Unix systems
+        print("Keyboard controls:")
+        print("Type 'w' + Enter to open gripper")
+        print("Type 's' + Enter to close gripper")
+        print("Type 'q' + Enter to quit")
+
+        while True:
+            try:
+                key = input().strip().lower()
+                if key == "w":
+                    gripper_target = min(gripper_target + 0.3, 2.0)
+                    print(f"Open gripper: {gripper_target:.2f}")
+                elif key == "s":
+                    gripper_target = max(gripper_target - 0.3, -0.2)
+                    print(f"Close gripper: {gripper_target:.2f}")
+                elif key == "q":
+                    break
+            except EOFError:
+                break
+
+
 def sim_loop(queue: Queue | None = None):
+    global gripper_target
     model = mujoco.MjModel.from_xml_path("scene.xml")
     data = mujoco.MjData(model)
 
@@ -60,9 +122,6 @@ def sim_loop(queue: Queue | None = None):
 
     mocap_id = model.body("target").mocapid[0]
 
-    # Gripper control variables
-    gripper_target = 0.0
-
     # Pre-allocate numpy arrays.
     jac = np.zeros((6, model.nv))
     diag = damping * np.eye(6)
@@ -81,20 +140,15 @@ def sim_loop(queue: Queue | None = None):
         y = r * np.sin(2 * np.pi * f * t) + k
         return np.array([x, y])
 
-    # Keyboard callback function
-    def key_callback(key):
-        nonlocal gripper_target
-        if key == 265:  # UP arrow key
-            gripper_target = max(gripper_target - 0.2, -0.2)  # Open gripper
-        elif key == 264:  # DOWN arrow key
-            gripper_target = min(gripper_target + 0.2, 2.0)  # Close gripper
+    # Start keyboard listener thread
+    keyboard_thread = threading.Thread(target=keyboard_listener, daemon=True)
+    keyboard_thread.start()
 
     with mujoco.viewer.launch_passive(
         model=model,
         data=data,
         show_left_ui=False,
         show_right_ui=False,
-        key_callback=key_callback,
     ) as viewer:
         mujoco.mj_resetDataKeyframe(model, data, key_id)
 
@@ -113,7 +167,7 @@ def sim_loop(queue: Queue | None = None):
             step_start = time.time()
             # data.mocap_pos[mocap_id, 0:2] = circle(data.time, 0.5, 0.5, 0.1, 0.1)
 
-            # Set gripper control from keyboard callback
+            # Set gripper control from keyboard thread
             data.ctrl[jaw_actuator_id] = gripper_target
 
             if queue is not None:
@@ -152,9 +206,16 @@ def sim_loop(queue: Queue | None = None):
             q_robot = q[dof_ids]
             # Get joint ranges for only the actuated joints
             robot_joint_ranges = model.jnt_range[dof_ids]
-            np.clip(q_robot, robot_joint_ranges[:, 0], robot_joint_ranges[:, 1], out=q_robot)
+            np.clip(
+                q_robot, robot_joint_ranges[:, 0], robot_joint_ranges[:, 1], out=q_robot
+            )
             q[dof_ids] = q_robot
-            data.ctrl[actuator_ids] = q_robot
+
+            # Set control for all joints except jaw (which is controlled by keyboard)
+            for i, actuator_id in enumerate(actuator_ids):
+                if actuator_id != jaw_actuator_id:  # Skip jaw actuator
+                    data.ctrl[actuator_id] = q_robot[i]
+            # Jaw control is set separately above
 
             # Step the simulation.
             mujoco.mj_step(model, data)
