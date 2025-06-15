@@ -40,7 +40,7 @@ Check out our **1-minute demonstration video** to see the system in action:
 1. **Clone the repository**:
    ```bash
    git clone <repository-url>
-   cd ikso100_final/ikso100
+   cd ikso100/ikso100
    ```
 
 2. **Install dependencies using uv** (recommended):
@@ -100,7 +100,7 @@ python calibrate.py
 ```
 
 ### Controls
-- **Hand Movement**: Move the 3D printed controller to control the robot's end-effector
+- **Hand Movement**: Move the 3D printed controller to control the robot's end-effector joint and custom key-binding for gripper manipulation
 - **Arrow Keys**: 
   - ↑ (UP): Open gripper
   - ↓ (DOWN): Close gripper
@@ -120,6 +120,28 @@ python calibrate.py
 3. **Gravity Compensation**: Maintains natural arm behavior in simulation
 4. **Joint Limits**: Respects robot's physical constraints
 
+### Parallel Processing Architecture
+The system runs **two parallel processes** that communicate via Python's `queue` module for real-time performance:
+
+1. **AprilTag Detection Process** (`april.py`):
+   - Runs in a separate daemon thread using `threading.Thread`
+   - Continuously captures camera frames and detects AprilTag poses
+   - Processes pose data and sends incremental movements to the queue
+   - Operates independently to maintain consistent vision processing rates
+
+2. **MuJoCo Simulation Process** (`mujoco_loop.py`):
+   - Runs in the main thread with the physics simulation loop
+   - Consumes pose data from the queue using `queue.get_nowait()`
+   - Updates robot end-effector position based on received movements
+   - Handles inverse kinematics and robot control in real-time
+
+**Queue Communication**:
+- Uses `queue.Queue(maxsize=1)` to ensure only the latest pose data is processed
+- Non-blocking queue operations prevent vision delays from affecting simulation
+- Automatic dropping of stale messages maintains responsive control
+
+This architecture ensures **smooth real-time teleoperation** by decoupling vision processing from robot simulation, allowing each process to run at its optimal frequency.
+
 ### Imitation Learning Pipeline
 ```
 Hand Movements → AprilTag Tracking → Virtual Leader Arm → Simulated SO-100 → Data Collection → Real Robot Training
@@ -129,11 +151,11 @@ Hand Movements → AprilTag Tracking → Virtual Leader Arm → Simulated SO-100
 
 | Traditional Setup | Our AprilTag System |
 |------------------|-------------------|
-| Leader Arm: $10,000+ | 3D Printed Controller: $5 |
-| Follower Arm: $15,000+ | Same SO-100 Robot |
-| **Total: $25,000+** | **Total: $15,005** |
+| Leader Arm: $100-$10,000+ | 3D Printed Controller: $5 |
+| Follower Arm: $100-$15,000+ | Same SO-100 Robot |
+| **Total: $200-$25,000+** | **Total: $15,005** |
 
-**Savings: ~$10,000 per setup** 💸
+**Savings: $200~$10,000 per setup** 💸
 
 ## 📁 Project Structure
 
