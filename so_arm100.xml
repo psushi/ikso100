@@ -131,7 +131,7 @@
   <contact>
     <exclude body1="Base" body2="Rotation_Pitch"/>
   </contact>
-  <keyframe>
-    <key name="home" qpos="0 -1.57079 1.57079 1.57079 -1.57079 0" ctrl="0 -1.57079 1.57079 1.57079 -1.57079 0"/>
-  </keyframe>
+  <!-- <keyframe> -->
+  <!--   <key name="home" qpos="0 -1.57079 1.57079 1.57079 -1.57079 0" ctrl="0 -1.57079 1.57079 1.57079 -1.57079 0"/> -->
+  <!-- </keyframe> -->
 </mujoco>

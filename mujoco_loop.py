@@ -53,9 +53,15 @@ def sim_loop(queue: Queue | None = None):
     dof_ids = [model.joint(name).id for name in joint_names]
     actuator_ids = [model.actuator(name).id for name in joint_names]
 
-    key_id = model.key("home").id
+    # Get jaw joint ID for manual control
+    jaw_dof_id = model.joint("Jaw").id
+    jaw_actuator_id = model.actuator("Jaw").id
+    key_id = model.key("home-scene").id
 
     mocap_id = model.body("target").mocapid[0]
+
+    # Gripper control variables
+    gripper_target = 0.0
 
     # Pre-allocate numpy arrays.
     jac = np.zeros((6, model.nv))
@@ -75,25 +81,40 @@ def sim_loop(queue: Queue | None = None):
         y = r * np.sin(2 * np.pi * f * t) + k
         return np.array([x, y])
 
+    # Keyboard callback function
+    def key_callback(key):
+        nonlocal gripper_target
+        if key == 265:  # UP arrow key
+            gripper_target = max(gripper_target - 0.2, -0.2)  # Open gripper
+        elif key == 264:  # DOWN arrow key
+            gripper_target = min(gripper_target + 0.2, 2.0)  # Close gripper
+
     with mujoco.viewer.launch_passive(
-        model=model, data=data, show_left_ui=False, show_right_ui=False
+        model=model,
+        data=data,
+        show_left_ui=False,
+        show_right_ui=False,
+        key_callback=key_callback,
     ) as viewer:
         mujoco.mj_resetDataKeyframe(model, data, key_id)
 
         # Initialize the camera view to that of the free camera.
         mujoco.mjv_defaultFreeCamera(model, viewer.cam)
-        
+
         # Position camera behind the robot
         viewer.cam.distance = 0.6  # Even closer to target
-        viewer.cam.azimuth = 270   # Behind the robot (270 degrees)
-        viewer.cam.elevation = -25 # Higher elevation, looking down more
-        
+        viewer.cam.azimuth = 270  # Behind the robot (270 degrees)
+        viewer.cam.elevation = -25  # Higher elevation, looking down more
+
         # Enable body axes visualization
-        viewer.opt.frame = mujoco.mjtFrame.mjFRAME_BODY
+        # viewer.opt.frame = mujoco.mjtFrame.mjFRAME_BODY
 
         while viewer.is_running():
             step_start = time.time()
             # data.mocap_pos[mocap_id, 0:2] = circle(data.time, 0.5, 0.5, 0.1, 0.1)
+
+            # Set gripper control from keyboard callback
+            data.ctrl[jaw_actuator_id] = gripper_target
 
             if queue is not None:
                 try:
@@ -127,8 +148,13 @@ def sim_loop(queue: Queue | None = None):
             mujoco.mj_integratePos(model, q, dq, integration_dt)
 
             # Set the control signal.
-            np.clip(q, *model.jnt_range.T, out=q)
-            data.ctrl[actuator_ids] = q[dof_ids]
+            # Only clip the actuated joints (robot joints), not the free cube joints
+            q_robot = q[dof_ids]
+            # Get joint ranges for only the actuated joints
+            robot_joint_ranges = model.jnt_range[dof_ids]
+            np.clip(q_robot, robot_joint_ranges[:, 0], robot_joint_ranges[:, 1], out=q_robot)
+            q[dof_ids] = q_robot
+            data.ctrl[actuator_ids] = q_robot
 
             # Step the simulation.
             mujoco.mj_step(model, data)

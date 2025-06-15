@@ -19,5 +19,12 @@
       <geom type="box" size=".03 .03 .03" contype="0" conaffinity="0" rgba=".6 .3 .3 .5"/>
       <site type="sphere" size="0.01" rgba="0 0 1 1" group="1"/>
     </body>
+    <body name="cube" pos="0 -.2 0.025">
+      <geom type="box" size="0.025 0.025 0.025" rgba="0 0.8 0 1" friction="0.7 0.05 0.05"/>
+      <freejoint/>
+    </body>
   </worldbody>
+  <keyframe>
+    <key name="home-scene" qpos="0 -1.57079 1.57079 1.57079 -1.57079 0 0 -0.2 0.025 1 0 0 0" ctrl="0 -1.57079 1.57079 1.57079 -1.57079 0"/>
+  </keyframe>
 </mujoco>

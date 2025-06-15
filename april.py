@@ -77,7 +77,7 @@ class PoseLPF:
         return self.pos.copy(), R.from_quat(self.quat).as_rotvec().reshape(1, 1, 3)
 
 
-cube_filter = PoseLPF(0.5, 0.5)  # smooth final COM pose
+cube_filter = PoseLPF(0.7, 0.5)  # smooth final COM pose
 tag_filters: dict[int, PoseLPF] = {}  # per-tag smoothing
 
 
