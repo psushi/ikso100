@@ -1,5 +1,5 @@
 # AprilArm 🪽 
-Zero cost leader arm for the SO-100 robotic arm
+Zero cost leader arm for the SO-100
 
 > Why buy expensive motors just to read joint angles?
 
