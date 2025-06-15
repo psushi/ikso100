@@ -19,7 +19,7 @@ Cost-effective robotic teleoperation using **AprilTags** with a **3D printed con
 |------------------|-------------------|
 | Leader Arm: $100+ & controller | 3D Printed Controller: $5 |
 | Follower Arm: $100+ & controller | 122$ & controller |
-| **Total: $230 | **Total: $127** |
+| **Total: $230** | **Total: $127** |
 
 ## 🔧 System Architecture
 **Hardware**: 3D printed controller with AprilTags, webcam, SO-100 robot  
