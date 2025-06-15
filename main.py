@@ -1,6 +1,8 @@
 import queue
 import threading
 
+import mujoco.viewer
+
 from april import vision_loop
 from mujoco_loop import sim_loop
 

@@ -3,6 +3,7 @@ import time
 from queue import Empty, Queue
 
 import mujoco
+import mujoco.viewer
 import numpy as np
 
 integration_dt: float = 1.0
