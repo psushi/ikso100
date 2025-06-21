@@ -1,5 +1,6 @@
-# AprilArm 🪽 
-Zero cost leader arm for the SO-100
+# AprilArm 🪽 (🏅 Winner of HuggingFace LeRobot Hackathon 2025)
+## _By Susheendhar Vijay, Nidhin Ninan, and Mohammed Rashad_
+### Zero-cost leader arm for the SO-100
 
 > Why buy expensive motors just to read joint angles?
 
@@ -93,6 +94,9 @@ uv run mujoco_loop.py     # MuJoCo simulation only
 - Research data collection  
 - Behavior prototyping
 - Remote teleoperation
+
+## 💡 Hackathon Update
+We are happy to share that this project was one of the winners of the [HuggingFace LeRobot Hackathon 2025](https://huggingface.co/spaces/LeRobot-worldwide-hackathon/all-winners), where we placed **#24** from over 250+ submissions worldwide **(Top 10%)**, and won a [LeKiwi](https://github.com/SIGRobotics-UIUC/LeKiwi) as a result. We thank [HuggingFace](https://huggingface.co/) and [Seeedstudio](https://www.seeedstudio.com/) for this award.
 
 ---
 
